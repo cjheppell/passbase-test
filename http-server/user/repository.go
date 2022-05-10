@@ -90,3 +90,16 @@ func (u *userRepository) AssociatePassbaseKey(userId UserId, passbaseKey string)
 
 	return nil
 }
+
+func (u *userRepository) GetAllUsers() []User {
+	u.mutex.RLock()
+	defer u.mutex.RUnlock()
+
+	users := []User{}
+
+	for _, user := range u.users {
+		users = append(users, user)
+	}
+
+	return users
+}

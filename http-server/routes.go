@@ -28,4 +28,7 @@ func register(mux *http.ServeMux) {
 
 	verifOnlyHandler := api.VerifiedOnlyHandler{}
 	mux.Handle("/verified", auth.NewIdVerifiedAuthorization(http.HandlerFunc(verifOnlyHandler.SayHello)))
+
+	debugHandler := api.NewDebugHandler(&userRepo)
+	mux.HandleFunc("/debug", debugHandler.PrintAllUsers)
 }
