@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/cjheppell/passbase/test-app/http-server/user"
+	"github.com/cjheppell/passbase-test/http-server/user"
 )
 
 type userRepo interface {

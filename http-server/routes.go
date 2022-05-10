@@ -3,10 +3,10 @@ package main
 import (
 	"net/http"
 
-	"github.com/cjheppell/passbase/test-app/http-server/api"
-	"github.com/cjheppell/passbase/test-app/http-server/auth"
-	"github.com/cjheppell/passbase/test-app/http-server/user"
-	"github.com/cjheppell/passbase/test-app/http-server/webhook"
+	"github.com/cjheppell/passbase-test/http-server/api"
+	"github.com/cjheppell/passbase-test/http-server/auth"
+	"github.com/cjheppell/passbase-test/http-server/user"
+	"github.com/cjheppell/passbase-test/http-server/webhook"
 )
 
 func register(mux *http.ServeMux) {

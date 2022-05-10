@@ -6,8 +6,8 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/cjheppell/passbase/test-app/http-server/auth"
-	"github.com/cjheppell/passbase/test-app/http-server/user"
+	"github.com/cjheppell/passbase-test/http-server/auth"
+	"github.com/cjheppell/passbase-test/http-server/user"
 )
 
 type userIdVerificationRepository interface {
