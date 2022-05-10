@@ -15,7 +15,7 @@ var (
 type User struct {
 	Id               UserId
 	IdentityVerified bool
-	passbaseKey      *string
+	PassbaseKey      *string
 }
 
 type userRepository struct {
@@ -34,7 +34,7 @@ func (u *userRepository) CreateIfNotExist(userId UserId) (User, error) {
 	newUser := User{
 		Id:               userId,
 		IdentityVerified: false,
-		passbaseKey:      nil,
+		PassbaseKey:      nil,
 	}
 	u.mutex.Lock()
 	defer u.mutex.Unlock()
@@ -61,7 +61,7 @@ func (u *userRepository) GetUserFromPassbaseKey(passbaseKey string) (*User, erro
 	u.mutex.RLock()
 	defer u.mutex.RUnlock()
 	for _, user := range u.users {
-		if user.passbaseKey == &passbaseKey {
+		if user.PassbaseKey == &passbaseKey {
 			return &user, nil
 		}
 	}
@@ -82,7 +82,7 @@ func (u *userRepository) AssociatePassbaseKey(userId UserId, passbaseKey string)
 	u.mutex.Lock()
 	defer u.mutex.Unlock()
 	if user, exists := u.users[userId]; exists {
-		user.passbaseKey = &passbaseKey
+		user.PassbaseKey = &passbaseKey
 		u.users[userId] = user
 	} else {
 		return UserNotFound
