@@ -108,6 +108,12 @@ func (p *PassbaseWebhookHandler) handleEventPayload(bodyContents []byte) error {
 		if err := json.Unmarshal(bodyContents, &payload); err != nil {
 			return err
 		}
+		fmt.Printf("received verif completed event: %+v\n", payload)
+	case verificationReviewed:
+		payload := verificationReviewedPayload{}
+		if err := json.Unmarshal(bodyContents, &payload); err != nil {
+			return err
+		}
 		fmt.Printf("received verif reviewed event: %+v\n", payload)
 
 		user, err := p.repo.GetUserFromPassbaseKey(payload.Key)
@@ -115,19 +121,14 @@ func (p *PassbaseWebhookHandler) handleEventPayload(bodyContents []byte) error {
 			return fmt.Errorf("failed to find user from passbase key: %w", err)
 		}
 
+		fmt.Printf("status was: %q", payload.Status)
 		if payload.Status == "approved" {
 			err := p.repo.RegisterUserVerified(user.Id)
 			if err != nil {
 				return fmt.Errorf("failed to register user as verified: %w", err)
 			}
+			fmt.Println("successfully registered user as verified")
 		}
-
-	case verificationReviewed:
-		payload := verificationReviewedPayload{}
-		if err := json.Unmarshal(bodyContents, &payload); err != nil {
-			return err
-		}
-		fmt.Printf("received verif reviewed event: %+v\n", payload)
 	case datapointUpdated:
 		payload := datapointUpdatedPayload{}
 		if err := json.Unmarshal(bodyContents, &payload); err != nil {
