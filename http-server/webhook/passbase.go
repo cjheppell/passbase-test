@@ -81,7 +81,7 @@ func (p *PassbaseWebhookHandler) ReceiveWebhookEvent(w http.ResponseWriter, r *h
 	err = p.handleEventPayload(bodyContents)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Printf("error printing webhook event payload: %s", err)
+		fmt.Printf("error printing webhook event payload: %s\n", err)
 		return
 	}
 
@@ -100,6 +100,7 @@ func (p *PassbaseWebhookHandler) handleEventPayload(bodyContents []byte) error {
 		if err := json.Unmarshal(bodyContents, &payload); err != nil {
 			return err
 		}
+		fmt.Printf("received verif reviewed event: %+v\n", payload)
 
 		user, err := p.repo.GetUserFromPassbaseKey(payload.Key)
 		if err != nil {
@@ -109,7 +110,7 @@ func (p *PassbaseWebhookHandler) handleEventPayload(bodyContents []byte) error {
 		if payload.Status == "approved" {
 			err := p.repo.RegisterUserVerified(user.Id)
 			if err != nil {
-				return err
+				return fmt.Errorf("failed to register user as verified: %w", err)
 			}
 		}
 
@@ -118,25 +119,25 @@ func (p *PassbaseWebhookHandler) handleEventPayload(bodyContents []byte) error {
 		if err := json.Unmarshal(bodyContents, &payload); err != nil {
 			return err
 		}
-		fmt.Printf("received verif reviewed event: %+v", payload)
+		fmt.Printf("received verif reviewed event: %+v\n", payload)
 	case datapointUpdated:
 		payload := datapointUpdatedPayload{}
 		if err := json.Unmarshal(bodyContents, &payload); err != nil {
 			return err
 		}
-		fmt.Printf("received data point updated event: %+v", payload)
+		fmt.Printf("received data point updated event: %+v\n", payload)
 	case watchlistMonitoring:
 		payload := watchlistMonitoringPayload{}
 		if err := json.Unmarshal(bodyContents, &payload); err != nil {
 			return err
 		}
-		fmt.Printf("received watchlist monitoring event: %+v", payload)
+		fmt.Printf("received watchlist monitoring event: %+v\n", payload)
 	case identityAuthenticated:
 		payload := identityAuthenticatedPayload{}
 		if err := json.Unmarshal(bodyContents, &payload); err != nil {
 			return err
 		}
-		fmt.Printf("received id auth event: %+v", payload)
+		fmt.Printf("received id auth event: %+v\n", payload)
 	}
 
 	return nil
