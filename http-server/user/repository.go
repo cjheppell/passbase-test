@@ -61,7 +61,7 @@ func (u *userRepository) GetUserFromPassbaseKey(passbaseKey string) (*User, erro
 	u.mutex.RLock()
 	defer u.mutex.RUnlock()
 	for _, user := range u.users {
-		if user.PassbaseKey == &passbaseKey {
+		if user.PassbaseKey != nil && *user.PassbaseKey == passbaseKey {
 			return &user, nil
 		}
 	}
@@ -74,6 +74,7 @@ func (u *userRepository) RegisterUserVerified(userId UserId) error {
 	if user, exists := u.users[userId]; exists {
 		user.IdentityVerified = true
 		u.users[userId] = user
+		return nil
 	}
 	return UserNotFound
 }
