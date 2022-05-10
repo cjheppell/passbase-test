@@ -76,6 +76,7 @@ func (p *PassbaseWebhookHandler) ReceiveWebhookEvent(w http.ResponseWriter, r *h
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+	defer r.Body.Close()
 
 	err = p.handleEventPayload(bodyContents)
 	if err != nil {
