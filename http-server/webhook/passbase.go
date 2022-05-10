@@ -73,14 +73,22 @@ func NewPassbaseWebhookHandler(repo idVerificationRepository) PassbaseWebhookHan
 func (p *PassbaseWebhookHandler) ReceiveWebhookEvent(w http.ResponseWriter, r *http.Request) {
 	bodyContents, err := io.ReadAll(r.Body)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprint(w, "Invalid payload")
 		return
 	}
 	defer r.Body.Close()
 
+	if len(bodyContents) == 0 {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprint(w, "Invalid payload")
+		return
+	}
+
 	err = p.handleEventPayload(bodyContents)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprint(w, "Invalid payload")
 		fmt.Printf("error printing webhook event payload: %s\n", err)
 		return
 	}
